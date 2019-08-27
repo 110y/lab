@@ -16,7 +16,7 @@ go_library(
 go_binary(
     name = "binary",
     embed = [":go_default_library"],
-    x_defs = {"github.com/110y/lab/go/bazel/container.Version": "0.0.1"},
+    x_defs = {"github.com/110y/lab/go/bazel/container.Version": "{STABLE_VERSION}"},
     visibility = ["//visibility:public"],
 )
 
