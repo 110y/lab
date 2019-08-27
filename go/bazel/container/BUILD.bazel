@@ -1,0 +1,35 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+
+# gazelle:prefix github.com/110y/lab/go/bazel/container
+gazelle(name = "gazelle")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/110y/lab/go/bazel/container",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "binary",
+    embed = [":go_default_library"],
+    x_defs = {"github.com/110y/lab/go/bazel/container.Version": "0.0.1"},
+    visibility = ["//visibility:public"],
+)
+
+go_image(
+    name = "image",
+    embed = [":go_default_library"],
+)
+
+container_push(
+  name = "publish",
+  image = ":image",
+  format = "Docker",
+  registry = "index.docker.io",
+  repository = "110y/test",
+  tag = "$(tag)",
+)
