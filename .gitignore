@@ -1,1 +1,3 @@
 bazel-*
+/lua/redis/lib
+/lua/redis/share

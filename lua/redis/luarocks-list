@@ -1,0 +1,10 @@
+
+Rocks installed for Lua 5.3 in /Users/ito.yuki/go/src/github.com/110y/lab/lua/redis/.
+-------------------------------------------------------------------------------------
+
+luasocket
+   3.0rc1-2 (installed) - /Users/ito.yuki/go/src/github.com/110y/lab/lua/redis/./lib/luarocks/rocks-5.3
+
+redis-lua
+   2.0.4-1 (installed) - /Users/ito.yuki/go/src/github.com/110y/lab/lua/redis/./lib/luarocks/rocks-5.3
+
