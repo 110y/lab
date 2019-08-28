@@ -2,8 +2,11 @@ package main
 
 import "fmt"
 
-var Version = "unknown"
+var (
+	Version  = "unknown"
+	Revision = "unknown"
+)
 
 func main() {
-	fmt.Printf("Hello World: %s\n", Version)
+	fmt.Printf("Hello World: %s %s\n", Version, Revision)
 }
