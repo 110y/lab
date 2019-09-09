@@ -1,3 +1,5 @@
-bazel-*
 /lua/redis/lib
 /lua/redis/share
+
+bazel-*
+.luaenv
