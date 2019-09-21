@@ -1,0 +1,10 @@
+---
+version: "3.7"
+services:
+  elasticsearch:
+    image: elasticsearch:7.3.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - ${ELASTICSEARCH_PORT}:9200
