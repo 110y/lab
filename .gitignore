@@ -4,9 +4,11 @@
 bazel-*
 .luaenv
 
-/cc/clangd/CMakeCache.txt
-/cc/clangd/CMakeFiles
-/cc/clangd/Makefile
-/cc/clangd/cmake_install.cmake
-/cc/clangd/compile_commands.json
+.clangd
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+compile_commands.json
+
 /cc/clangd/hello
+/cc/clangd/Makefile

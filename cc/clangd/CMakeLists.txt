@@ -13,7 +13,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_COMPILER clang++)
 
-include_directories(./source)
+include_directories(source)
 
 # puts all .cpp files inside src to the SOURCES variable
 # file(GLOB SOURCES foo/**/*.cpp)
