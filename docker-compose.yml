@@ -1,6 +1,13 @@
 ---
 version: "3.7"
 services:
+  protoc:
+    build:
+      context: ./containers/protoc
+    working_dir: /usr/local/src/lab
+    volumes:
+      - ./:/usr/local/src/lab:cached
+
   elasticsearch:
     image: elasticsearch:7.3.2
     container_name: elasticsearch

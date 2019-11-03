@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package echo;
+
+option go_package = "echopb";
+option java_multiple_files = true;
+option java_outer_classname = "ServerProto";
+option java_package = "com.echo";
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}
+
+message EchoRequest {}
+
+message EchoResponse {
+  string host = 1;
+}
