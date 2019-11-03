@@ -8,6 +8,22 @@ services:
     volumes:
       - ./:/usr/local/src/lab:cached
 
+  grpc-web-envoy:
+    image: envoyproxy/envoy:v1.12.0
+    ports:
+      - ${GRPC_WEB_ENVOY_PORT}:10000
+    volumes:
+      - ./grpc-web/envoy.yaml:/etc/envoy/envoy.yaml
+
+  grpc-web-server:
+    image: golang:1.13.3-alpine3.10
+    ports:
+      - ${GRPC_WEB_SERVER_PORT}:9000
+    volumes:
+      - ./:/usr/local/src/workspace
+    working_dir: /usr/local/src/workspace/
+    command: go run ./grpc-web/server
+
   elasticsearch:
     image: elasticsearch:7.3.2
     container_name: elasticsearch
