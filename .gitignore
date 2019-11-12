@@ -4,6 +4,8 @@
 bazel-*
 .luaenv
 
+a.out.*
+
 .clangd
 CMakeCache.txt
 CMakeFiles
