@@ -1,3 +1,6 @@
 [submodule "_third_party/envoy"]
 	path = _third_party/envoy
 	url = git@github.com:envoyproxy/envoy.git
+[submodule "_third_party/envoy-filter-example"]
+	path = _third_party/envoy-filter-example
+	url = git@github.com:envoyproxy/envoy-filter-example.git
