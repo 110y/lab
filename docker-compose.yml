@@ -1,5 +1,6 @@
 ---
 version: "3.7"
+
 services:
   protoc:
     build:
@@ -31,3 +32,9 @@ services:
       - discovery.type=single-node
     ports:
       - ${ELASTICSEARCH_PORT}:9200
+
+  envoy-upstream:
+    build:
+      context: ./envoy/upstream
+    ports:
+      - ${ENVOY_UPSTREAM_PORT}:8080
