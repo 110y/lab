@@ -18,3 +18,5 @@ main.plist
 /cc/clangd/Makefile
 
 /node_modules
+
+/bin/*
