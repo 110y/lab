@@ -30,7 +30,4 @@ envoy-filter-example:
 	    --volume "${HOME}/.config/gcloud/application_default_credentials.json:/etc/google_application_default_credentials.json" \
 	    --workdir /usr/local/src/workspace/_third_party/envoy-filter-example \
 	    envoyproxy/envoy-build-ubuntu:d06dad145694f1a7a02b5c6d0c75b32f753db2dd \
-	    bazel build \
-	    --google_credentials=/etc/google_application_default_credentials.json \
-	    --remote_http_cache=https://storage.googleapis.com/$$BAZEL_REMOTE_HTTP_CACHE_GCS_STORAGE \
-	    //:envoy
+	    bash -c "bazel build --google_credentials=/etc/google_application_default_credentials.json --remote_http_cache=https://storage.googleapis.com/$$BAZEL_REMOTE_HTTP_CACHE_GCS_STORAGE //http-filter-example:envoy && cp -f ./bazel-bin/http-filter-example/envoy ../../bin/envoy-filter-example"
