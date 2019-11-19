@@ -1,3 +1,5 @@
+ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
+
 .PHONY: go-bazel-helloworld-binary
 go-bazel-helloworld-binary:
 	@cd ./go/bazel/container && \
@@ -29,5 +31,14 @@ envoy-filter-example:
 	    --volume "${PWD}:/usr/local/src/workspace" \
 	    --volume "${HOME}/.config/gcloud/application_default_credentials.json:/etc/google_application_default_credentials.json" \
 	    --workdir /usr/local/src/workspace/_third_party/envoy-filter-example \
-	    envoyproxy/envoy-build-ubuntu:d06dad145694f1a7a02b5c6d0c75b32f753db2dd \
+	    envoyproxy/envoy-build-ubuntu:${ENVOY_BUILD_UBUNTU_VERSION} \
 	    bash -c "bazel build --google_credentials=/etc/google_application_default_credentials.json --remote_http_cache=https://storage.googleapis.com/$$BAZEL_REMOTE_HTTP_CACHE_GCS_STORAGE //http-filter-example:envoy && cp -f ./bazel-bin/http-filter-example/envoy ../../bin/envoy-filter-example"
+
+.PHONY: envoy-filter-hello
+envoy-filter-hello:
+	docker run --rm \
+	    --volume "${PWD}:/usr/local/src/workspace" \
+	    --volume "${HOME}/.config/gcloud/application_default_credentials.json:/etc/google_application_default_credentials.json" \
+	    --workdir /usr/local/src/workspace \
+	    envoyproxy/envoy-build-ubuntu:d06dad145694f1a7a02b5c6d0c75b32f753db2dd \
+	    bash -c "bazel build --google_credentials=/etc/google_application_default_credentials.json --remote_http_cache=https://storage.googleapis.com/$$BAZEL_REMOTE_HTTP_CACHE_GCS_STORAGE //envoy/filter/hello:envoy && cp -f ./bazel-bin/envoy/filter/hello/envoy ./bin/envoy-filter-hello"
