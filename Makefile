@@ -25,6 +25,9 @@ pb:
 		--go_out=plugins=grpc:proto/echo \
 		proto/echo/*.proto
 
+./cc/emscripten/a.out.js: ./cc/emscripten/test.cc
+	docker-compose run --rm emscripten /usr/local/src/emscripten/emcc -o ./cc/emscripten/a.out.js ./cc/emscripten/test.cc
+
 .PHONY: envoy-filter-example
 envoy-filter-example:
 	docker run --rm \
