@@ -7,3 +7,6 @@
 [submodule "_third_party/istio-installer"]
 	path = _third_party/istio-installer
 	url = git@github.com:istio/installer.git
+[submodule "_third_party/envoy-wasm"]
+	path = _third_party/envoy-wasm
+	url = git@github.com:envoyproxy/envoy-wasm.git
