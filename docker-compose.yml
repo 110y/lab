@@ -61,6 +61,7 @@ services:
     volumes:
       - ./bin/envoy-wasm:/usr/local/bin/envoy
       - ./envoy/filter/wasm/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./_third_party/envoy-wasm/examples/wasm/envoy_filter_http_wasm_example.wasm:/etc/envoy/filter.wasm
     ports:
       - ${ENVOY_FILTER_WASM_PORT}:10000
 
