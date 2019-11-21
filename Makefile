@@ -54,3 +54,7 @@ envoy-wasm:
 .PHONY: envoy-wasm-sdk
 envoy-wasm-sdk:
 	docker build -t envoy-wasm-sdk:v2 -f ./_third_party/envoy-wasm/api/wasm/cpp/Dockerfile-sdk ./_third_party/envoy-wasm/api/wasm/cpp
+
+.PHONY: envoy-wasm-filter
+envoy-wasm-filter:
+	docker run -v $$PWD/envoy/filter/wasm/:/work -w /work envoy-wasm-sdk:v2 /build_wasm.sh
