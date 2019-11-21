@@ -56,8 +56,24 @@ services:
     ports:
       - ${ENVOY_FILTER_HELLO_PORT}:10000
 
+  envoy-filter-wasm:
+    image: envoyproxy/envoy:v1.12.0
+    volumes:
+      - ./bin/envoy-wasm:/usr/local/bin/envoy
+      - ./envoy/filter/wasm/envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - ${ENVOY_FILTER_WASM_PORT}:10000
+
   envoy-upstream:
     build:
       context: ./envoy/upstream
     ports:
       - ${ENVOY_UPSTREAM_PORT}:8080
+
+  envoy-builder:
+    build:
+      context: ./containers/envoy-builder
+    working_dir: /usr/local/src/workspace/
+    volumes:
+      - ./:/usr/local/src/workspace:cached
+      - ${HOME}/.config/gcloud/application_default_credentials.json:/etc/google_application_default_credentials.json
