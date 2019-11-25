@@ -1,6 +1,8 @@
 /lua/redis/lib
 /lua/redis/share
 
+.vagrant
+
 bazel-*
 .luaenv
 
