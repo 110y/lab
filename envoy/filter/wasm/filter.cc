@@ -48,6 +48,8 @@ FilterHeadersStatus ExampleContext::onRequestHeaders(uint32_t) {
         LOG_INFO(std::string(p.first) + std::string(" -> ") +
                  std::string(p.second));
     }
+    addRequestHeader("foo", "bar");
+    // addResponseHeader("newheader", "helloenvoywasmfilter");
     return FilterHeadersStatus::Continue;
 }
 
