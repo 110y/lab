@@ -69,13 +69,26 @@ Vagrant.configure("2") do |config|
   # SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
-    sudo apt-get update -y
-    sudo apt-get install -y linux-image-4.18.0-25-generic
+    apt-get update -y
+    apt-get install -y linux-image-4.18.0-25-generic
   SHELL
 
   config.vm.provision :reload
 
   config.vm.provision "shell", inline: <<-SHELL
-    sudo apt-get install -y bpfcc-tools linux-headers-$(uname -r)
+    apt-get install -y bpfcc-tools linux-headers-$(uname -r)
+
+    wget "https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz"
+    tar xvf "go1.13.4.linux-amd64.tar.gz"
+    mv ./go /usr/local/go
+    rm "go1.13.4.linux-amd64.tar.gz"
+
+    echo 'export GOPATH=/home/vagrant/go' >> /home/vagrant/.bashrc
+    echo 'export GOROOT=/usr/local/go' >> /home/vagrant/.bashrc
+    echo 'export PATH=$GOPATH/bin:$GOROOT/bin:$PATH' >> /home/vagrant/.bashrc
+
+    echo 'cd /workspace' >> /home/vagrant/.bashrc
   SHELL
+
+  config.vm.synced_folder "../../", "/workspace"
 end
