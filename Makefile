@@ -1,4 +1,5 @@
 ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
+ISTIO_VERSION := 1.4.0
 
 .PHONY: go-bazel-helloworld-binary
 go-bazel-helloworld-binary:
@@ -73,18 +74,18 @@ istio-crd:
 
 .PHONY: istio-citadel
 istio-citadel:
-	cd ./_third_party/istio-installer && HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-system citadel ./security/citadel
+	cd ./_third_party/istio-installer && HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop istio-system citadel ./security/citadel
 
 .PHONY: istio-config
 istio-config:
 	cd ./_third_party/istio-installer && \
-		HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-control istio-config ./istio-control/istio-config \
+		HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop istio-control istio-config ./istio-control/istio-config \
 		--set configValidation=true
 
 .PHONY: istio-discovery
 istio-discovery:
 	cd ./_third_party/istio-installer && \
-		HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-control istio-discovery ./istio-control/istio-discovery \
+		HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop istio-control istio-discovery ./istio-control/istio-discovery \
 		--set global.istioNamespace=istio-system \
 		--set global.configNamespace=istio-control \
 		--set global.telemetryNamespace=istio-telemetry \
@@ -93,7 +94,7 @@ istio-discovery:
 .PHONY: istio-autoinject
 istio-autoinject:
 	cd ./_third_party/istio-installer && \
-		HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-control istio-autoinject ./istio-control/istio-autoinject \
+		HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop istio-control istio-autoinject ./istio-control/istio-autoinject \
 		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
 		--set global.configNamespace=istio-control \
 		--set global.telemetryNamespace=istio-telemetry \
