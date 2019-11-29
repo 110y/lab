@@ -62,3 +62,39 @@ envoy-wasm-filter:
 .PHONY: bpf-ubuntu
 bpf-ubuntu:
 	cd ./bpf/ubuntu && vagrant up && vagrant ssh
+
+.PHONY: bpf-ubuntu-reset
+bpf-ubuntu-reset:
+	cd ./bpf/ubuntu && vagrant destroy -f && vagrant up && vagrant ssh
+
+.PHONY: istio-crd
+istio-crd:
+	kubectl apply -k ./_third_party/istio-installer/base
+
+.PHONY: istio-citadel
+istio-citadel:
+	cd ./_third_party/istio-installer && HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-system citadel ./security/citadel
+
+.PHONY: istio-config
+istio-config:
+	cd ./_third_party/istio-installer && \
+		HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-control istio-config ./istio-control/istio-config \
+		--set configValidation=true
+
+.PHONY: istio-discovery
+istio-discovery:
+	cd ./_third_party/istio-installer && \
+		HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-control istio-discovery ./istio-control/istio-discovery \
+		--set global.istioNamespace=istio-system \
+		--set global.configNamespace=istio-control \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set global.policyNamespace=istio-policy
+
+.PHONY: istio-autoinject
+istio-autoinject:
+	cd ./_third_party/istio-installer && \
+		HUB=docker.io/istio TAG=1.4.0 ./bin/iop istio-control istio-autoinject ./istio-control/istio-autoinject \
+		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
+		--set global.configNamespace=istio-control \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set istio_cni.enabled=false
