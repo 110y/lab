@@ -77,7 +77,66 @@ istio-citadel:
 	@cd ./_third_party/istio-installer && HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
 		istio-system \
 		citadel \
-		./security/citadel
+		./security/citadel \
+		-t \
+		--set global.mtls.enabled=false \
+		> ../../kubernetes/istio-system/citadel.yaml
+
+.PHONY: istio-discovery
+istio-discovery:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-master HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-master \
+		istio-discovery-master \
+		./istio-control/istio-discovery \
+		-t \
+		--set global.istioNamespace=istio-system \
+		--set global.configNamespace=istio-master \
+		--set global.telemetryNamespace=istio-telemetry-master \
+		--set global.policyNamespace=istio-policy-master \
+		--set pilot.useMCP=false \
+		--set policy.enable=false \
+		> ../../kubernetes/istio-master/discovery.yaml
+
+.PHONY: istio-autoinject
+istio-autoinject:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-master HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-master \
+		istio-autoinject-master \
+		./istio-control/istio-autoinject \
+		-t \
+		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
+		--set global.configNamespace=istio-master \
+		--set global.telemetryNamespace=istio-telemetry-master \
+		--set istio_cni.enabled=false \
+		> ../../kubernetes/istio-master/autoinject.yaml
+
+.PHONY: istio-discovery-canary
+istio-discovery-canary:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control-canary HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-control-canary \
+		istio-discovery-canary \
+		./istio-control/istio-discovery \
+		--set global.istioNamespace=istio-system \
+		--set global.configNamespace=istio-control-canary \
+		--set global.telemetryNamespace=istio-telemetry-canary \
+		--set global.policyNamespace=istio-policy-canary \
+		--set pilot.useMCP=false \
+		--set policy.enable=false
+
+.PHONY: istio-autoinject-canary
+istio-autoinject-canary:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control-canary HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-control-canary \
+		istio-autoinject-canary \
+		./istio-control/istio-autoinject \
+		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
+		--set global.configNamespace=istio-canary \
+		--set global.telemetryNamespace=istio-telemetry-canary \
+		--set istio_cni.enabled=false
 
 .PHONY: istio-config
 istio-config:
@@ -87,25 +146,3 @@ istio-config:
 		istio-config \
 		./istio-control/istio-config \
 		--set configValidation=true
-
-.PHONY: istio-discovery
-istio-discovery:
-	@cd ./_third_party/istio-installer && \
-		HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
-		istio-control \
-		istio-discovery \
-		./istio-control/istio-discovery \
-		--set global.istioNamespace=istio-system \
-		--set global.configNamespace=istio-control \
-		--set global.telemetryNamespace=istio-telemetry \
-		--set global.policyNamespace=istio-policy \
-		--set pilot.useMCP=false
-
-.PHONY: istio-autoinject
-istio-autoinject:
-	@cd ./_third_party/istio-installer && \
-		HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop istio-control istio-autoinject ./istio-control/istio-autoinject \
-		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
-		--set global.configNamespace=istio-control \
-		--set global.telemetryNamespace=istio-telemetry \
-		--set istio_cni.enabled=false
