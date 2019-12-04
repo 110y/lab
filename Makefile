@@ -70,7 +70,7 @@ bpf-ubuntu-reset:
 
 .PHONY: istio-crd
 istio-crd:
-	kubectl apply -k ./_third_party/istio-installer/base
+	kustomize build ./_third_party/istio-installer/base > ./kubernetes/crd/istio.yaml
 
 .PHONY: istio-citadel
 istio-citadel:
