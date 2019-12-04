@@ -94,8 +94,9 @@ istio-discovery:
 		--set global.configNamespace=istio-master \
 		--set global.telemetryNamespace=istio-telemetry-master \
 		--set global.policyNamespace=istio-policy-master \
-		--set pilot.useMCP=false \
 		--set policy.enable=false \
+		--set pilot.useMCP=false \
+		--set global.mtls.enabled=false \
 		> ../../kubernetes/istio-master/discovery.yaml
 
 .PHONY: istio-autoinject
