@@ -62,11 +62,11 @@ envoy-wasm-filter:
 
 .PHONY: bpf-ubuntu
 bpf-ubuntu:
-	cd ./bpf/ubuntu && vagrant up && vagrant ssh
+	cd ./linux/bpf/ubuntu && vagrant up && vagrant ssh
 
 .PHONY: bpf-ubuntu-reset
 bpf-ubuntu-reset:
-	cd ./bpf/ubuntu && vagrant destroy -f && vagrant up && vagrant ssh
+	cd ./linux/bpf/ubuntu && vagrant destroy -f && vagrant up && vagrant ssh
 
 .PHONY: istio-crd
 istio-crd:
