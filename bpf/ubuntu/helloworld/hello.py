@@ -6,7 +6,7 @@ from bcc import BPF
 
 bpf_text = """
 int trace_sys_clone(struct pt_regs *ctx) {
-  bpf_trace_printk("Hello, World!\\n");
+  bpf_trace_printk("sys_clone\\n");
   return 0;
 }
 """
