@@ -1,5 +1,6 @@
 ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
 ISTIO_VERSION := 1.4.0
+ISTIO_VERSION_CANARY := 1.4.1
 
 .PHONY: go-bazel-helloworld-binary
 go-bazel-helloworld-binary:
@@ -79,7 +80,7 @@ istio-citadel:
 		citadel \
 		./security/citadel \
 		-t \
-		--set global.mtls.enabled=false \
+		--set 'security.dnsCerts.istio-sidecar-injector-service-account\.istio-control-canary=istio-sidecar-injector\.istio-control-canary\.svc' \
 		> ../../kubernetes/istio-system/citadel.yaml
 
 .PHONY: istio-discovery
@@ -116,28 +117,33 @@ istio-autoinject:
 .PHONY: istio-discovery-canary
 istio-discovery-canary:
 	@cd ./_third_party/istio-installer && \
-		ISTIO_ENV=istio-control-canary HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
-		istio-control-canary \
-		istio-discovery-canary \
+		ISTIO_ENV=istio-control HUB=docker.io/istio TAG=${ISTIO_VERSION_CANARY} ./bin/iop \
+		istio-control \
+		istio-discovery \
 		./istio-control/istio-discovery \
+		-t \
 		--set global.istioNamespace=istio-system \
-		--set global.configNamespace=istio-control-canary \
-		--set global.telemetryNamespace=istio-telemetry-canary \
-		--set global.policyNamespace=istio-policy-canary \
+		--set global.configNamespace=istio-control \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set global.policyNamespace=istio-policy \
 		--set pilot.useMCP=false \
-		--set policy.enable=false
+		--set policy.enable=false \
+		--set global.mtls.enabled=false \
+		> ../../kubernetes/istio-control-canary/discovery.yaml
 
 .PHONY: istio-autoinject-canary
 istio-autoinject-canary:
 	@cd ./_third_party/istio-installer && \
-		ISTIO_ENV=istio-control-canary HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
-		istio-control-canary \
-		istio-autoinject-canary \
+		ISTIO_ENV=istio-control HUB=docker.io/istio TAG=${ISTIO_VERSION_CANARY} ./bin/iop \
+		istio-control \
+		istio-autoinject \
 		./istio-control/istio-autoinject \
+		-t \
 		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
-		--set global.configNamespace=istio-canary \
-		--set global.telemetryNamespace=istio-telemetry-canary \
-		--set istio_cni.enabled=false
+		--set global.configNamespace=istio-control \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set istio_cni.enabled=false \
+		> ../../kubernetes/istio-control-canary/autoinject.yaml
 
 .PHONY: istio-config
 istio-config:
