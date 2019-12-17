@@ -8,9 +8,9 @@ admin:
       port_value: 9901
 
 static_resources:
+
   listeners:
-    - name: listener_0
-      address:
+    - address:
         socket_address:
           protocol: TCP
           address: 0.0.0.0
@@ -24,16 +24,18 @@ static_resources:
             route_config:
               name: local_route
               virtual_hosts:
-              - name: local_service
-                domains: ["*"]
-                routes:
-                - match:
-                    prefix: "/"
-                  route:
-                    cluster: upstream
+                - name: local_service
+                  domains:
+                    - "*"
+                  routes:
+                    - match:
+                        prefix: "/"
+                      route:
+                        cluster: upstream
             http_filters:
               - name: envoy.filters.http.wasm
-                config:
+                typed_config:
+                  "@type": type.googleapis.com/envoy.config.filter.http.wasm.v2.Wasm
                   config:
                     name: "my_plugin"
                     root_id: "my_root_id"
@@ -50,7 +52,6 @@ static_resources:
     - name: upstream
       connect_timeout: 0.25s
       type: LOGICAL_DNS
-      # Comment out the following line to test on v6 networks
       dns_lookup_family: V4_ONLY
       lb_policy: ROUND_ROBIN
       load_assignment:
