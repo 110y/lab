@@ -61,17 +61,17 @@ envoy-wasm-sdk:
 envoy-wasm-filter:
 	docker run -v $$PWD/envoy/filter/wasm/:/work -w /work envoy-wasm-sdk:v2 /build_wasm.sh
 
-.PHONY: bpf-ubuntu
-bpf-ubuntu:
-	cd ./linux/bpf/ubuntu && vagrant up && vagrant ssh
+.PHONY: ubuntu
+ubuntu:
+	cd ./linux/ubuntu && vagrant up && vagrant ssh
 
-.PHONY: bpf-ubuntu-reset
-bpf-ubuntu-reset:
-	cd ./linux/bpf/ubuntu && vagrant destroy -f && vagrant up && vagrant ssh
+.PHONY: ubuntu-reset
+ubuntu-reset:
+	cd ./linux/ubuntu && vagrant destroy -f && vagrant up && vagrant ssh
 
 .PHONY: bpf-go
 bpf-go:
-	sudo /usr/local/go/bin/go run ./linux/bpf/ubuntu/helloworld/hello.go &
+	sudo /usr/local/go/bin/go run ./linux/bpf/helloworld/hello.go &
 	sudo cat /sys/kernel/debug/tracing/trace_pipe
 
 .PHONY: istio-crd
