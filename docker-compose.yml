@@ -57,7 +57,7 @@ services:
       - ${ENVOY_FILTER_HELLO_PORT}:10000
 
   envoy-filter-wasm:
-    image: envoyproxy/envoy:v1.12.0
+    image: envoyproxy/envoy:v1.12.2
     volumes:
       - ./bin/envoy-wasm:/usr/local/bin/envoy
       - ./envoy/filter/wasm/envoy.yaml:/etc/envoy/envoy.yaml
