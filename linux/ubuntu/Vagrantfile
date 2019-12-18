@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
     # vb.gui = true
 
     # Customize the amount of memory on the VM:
-    vb.memory = "1024"
+    vb.memory = "2048"
   end
   #
   # View the documentation for the provider you are using for more
@@ -76,11 +76,23 @@ Vagrant.configure("2") do |config|
   config.vm.provision :reload
 
   config.vm.provision "shell", inline: <<-SHELL
+    apt-get -y install bison build-essential cmake flex git libedit-dev \
+        libllvm6.0 llvm-6.0-dev libclang-6.0-dev python zlib1g-dev libelf-dev linux-headers-$(uname -r)
+
+    git clone https://github.com/iovisor/bcc.git
+    cd bcc && git checkout v0.11.0
+    mkdir build; cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+    make && make install
+
+    apt-get install -y libcgroup1 cgroup-tools
+    apt-get install -y lxc openssh-server
+
     apt-get install -y gcc
-    wget https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz
-    tar xvf go1.13.5.linux-amd64.tar.gz
+    wget https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
+    tar xvf go1.13.4.linux-amd64.tar.gz
     mv ./go /usr/local/go
-    rm go1.13.5.linux-amd64.tar.gz
+    rm go1.13.4.linux-amd64.tar.gz
 
     echo 'export GOPATH=/home/vagrant/go' >> /home/vagrant/.bashrc
     echo 'export GOROOT=/usr/local/go' >> /home/vagrant/.bashrc
@@ -89,5 +101,5 @@ Vagrant.configure("2") do |config|
     echo 'cd /workspace' >> /home/vagrant/.bashrc
   SHELL
 
-  config.vm.synced_folder "../../../", "/workspace"
+  config.vm.synced_folder "../../", "/workspace"
 end

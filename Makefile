@@ -69,6 +69,11 @@ bpf-ubuntu:
 bpf-ubuntu-reset:
 	cd ./linux/bpf/ubuntu && vagrant destroy -f && vagrant up && vagrant ssh
 
+.PHONY: bpf-go
+bpf-go:
+	sudo /usr/local/go/bin/go run ./linux/bpf/ubuntu/helloworld/hello.go &
+	sudo cat /sys/kernel/debug/tracing/trace_pipe
+
 .PHONY: istio-crd
 istio-crd:
 	kustomize build ./_third_party/istio-installer/base > ./kubernetes/crd/istio.yaml
