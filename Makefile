@@ -158,3 +158,7 @@ istio-config:
 		istio-config \
 		./istio-control/istio-config \
 		--set configValidation=true
+
+.PHONY: lab-cluster
+lab-cluster:
+	kind create cluster --name lab
