@@ -71,7 +71,7 @@ ubuntu-reset:
 
 .PHONY: bpf-go
 bpf-go:
-	sudo /usr/local/go/bin/go run ./linux/bpf/helloworld/hello.go &
+	sudo go run ./linux/bpf/helloworld/hello.go &
 	sudo cat /sys/kernel/debug/tracing/trace_pipe
 
 .PHONY: istio-crd
