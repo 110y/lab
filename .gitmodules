@@ -10,3 +10,6 @@
 [submodule "_third_party/envoy-wasm"]
 	path = _third_party/envoy-wasm
 	url = git@github.com:envoyproxy/envoy-wasm.git
+[submodule "cc/jwt/third_party/jwt-cpp"]
+	path = cc/jwt/third_party/jwt-cpp
+	url = git@github.com:Thalhammer/jwt-cpp.git
