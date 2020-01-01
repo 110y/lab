@@ -6,6 +6,7 @@
 bazel-*
 .luaenv
 
+a.out
 a.out.*
 
 .clangd
