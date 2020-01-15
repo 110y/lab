@@ -7,14 +7,14 @@ metadata:
   namespace: istio-control
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
     istio: pilot
 spec:
   minAvailable: 1
   selector:
     matchLabels:
       app: pilot
-      release: istio-control-istio-discovery
+      release: istio-control-istio-discovery-master
       istio: pilot
 ---
 # Source: istio-discovery/templates/configmap-envoy.yaml
@@ -24,7 +24,7 @@ metadata:
   namespace: istio-control
   name: pilot-envoy-config
   labels:
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 data:
   envoy.yaml.tmpl: |-
     admin:
@@ -195,7 +195,7 @@ metadata:
   name: istio
   namespace: istio-control
   labels:
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 data:
 
   meshNetworks: |-
@@ -252,7 +252,7 @@ data:
     accessLogFile: ""
 
     enableEnvoyAccessLogService: false
-    mixerCheckServer: istio-policy.istio-policy.svc.cluster.local:15004
+    mixerCheckServer: istio-policy.istio-policy-master.svc.cluster.local:15004
     mixerReportServer: istio-telemetry.istio-telemetry.svc.cluster.local:15004
     # reportBatchMaxEntries is the number of requests that are batched before telemetry data is sent to the mixer server
     reportBatchMaxEntries: 100
@@ -361,7 +361,7 @@ metadata:
   namespace: istio-control
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 ---
 # Source: istio-discovery/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -370,7 +370,7 @@ metadata:
   name: istio-pilot-istio-control
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 rules:
 - apiGroups: ["config.istio.io"]
   resources: ["*"]
@@ -419,7 +419,7 @@ metadata:
   name: istio-pilot-istio-control
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -437,7 +437,7 @@ metadata:
   namespace: istio-control
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
     istio: pilot
 spec:
   ports:
@@ -461,7 +461,7 @@ metadata:
   # TODO: default template doesn't have this, which one is right ?
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
     istio: pilot
 spec:
   strategy:
@@ -484,7 +484,7 @@ spec:
       serviceAccountName: istio-pilot-service-account
       containers:
         - name: discovery
-          image: "docker.io/istio/pilot:1.4.1"
+          image: "docker.io/istio/pilot:1.4.0"
           imagePullPolicy: IfNotPresent
           args:
           - "discovery"
@@ -534,7 +534,7 @@ spec:
           - name: config-volume
             mountPath: /etc/istio/config
         - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.4.1"
+          image: "docker.io/istio/proxyv2:1.4.0"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 15011
@@ -633,7 +633,7 @@ metadata:
   namespace: istio-control
   labels:
     app: pilot
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 spec:
   maxReplicas: 5
   minReplicas: 1
@@ -654,7 +654,7 @@ kind: "MeshPolicy"
 metadata:
   name: "default"
   labels:
-    release: istio-control-istio-discovery
+    release: istio-control-istio-discovery-master
 spec:
   peers:
   - mtls:
