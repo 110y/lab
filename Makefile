@@ -119,6 +119,23 @@ istio-autoinject:
 		--set istio_cni.enabled=false \
 		> ../../kubernetes/istio-control/autoinject.yaml
 
+.PHONY: istio-mixer
+istio-mixer:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-telemetry \
+		istio-mixer \
+		./istio-telemetry/mixer-telemetry/ \
+		-t \
+		--set global.configNamespace=istio-control \
+		--set global.istioNamespace=istio-system \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set global.policyNamespace=istio-policy \
+		--set global.mtls.enabled=false \
+		--set policy.enable=false \
+		--set mixer.telemetry.useMCP=false \
+		> ../../kubernetes/istio-telemetry/mixer.yaml
+
 .PHONY: istio-discovery-master
 istio-discovery-master:
 	@cd ./_third_party/istio-installer && \
