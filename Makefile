@@ -162,3 +162,8 @@ istio-config:
 .PHONY: lab-cluster
 lab-cluster:
 	kind create cluster --name lab
+
+.PHONY: controller-runtime-example-container
+controller-runtime-example-container:
+	docker build -f ./kubernetes/controller-runtime/Dockerfile -t registry:5000/controller-runtime-example:latest .
+	docker push registry:5000/controller-runtime-example:latest

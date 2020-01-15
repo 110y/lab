@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: controller-runtime-example
+  name: controller-runtime-example
+  namespace: controller-runtime
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: controller-runtime-example
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: controller-runtime-example
+    spec:
+      containers:
+        - image: registry:5000/controller-runtime-example:latest
+          imagePullPolicy: Always
+          name: controller-runtime-example
