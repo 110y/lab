@@ -1,5 +1,5 @@
 ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
-ISTIO_VERSION := 1.4.0
+ISTIO_VERSION := 1.4.3
 ISTIO_VERSION_CANARY := 1.4.1
 
 .PHONY: go-bazel-helloworld-binary
@@ -73,6 +73,9 @@ ubuntu-reset:
 bpf-go:
 	sudo go run ./linux/bpf/helloworld/hello.go &
 	sudo cat /sys/kernel/debug/tracing/trace_pipe
+
+istio-components: istio-discovery istio-autoinject istio-mixer
+istio-components-master: istio-discovery-master istio-autoinject-master istio-mixer-master
 
 .PHONY: istio-crd
 istio-crd:
@@ -166,6 +169,23 @@ istio-autoinject-master:
 		--set global.telemetryNamespace=istio-telemetry-master \
 		--set istio_cni.enabled=false \
 		> ../../kubernetes/istio-control-master/autoinject.yaml
+
+.PHONY: istio-mixer-master
+istio-mixer-master:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control-master HUB=docker.io/istio TAG=${ISTIO_VERSION_CANARY} ./bin/iop \
+		istio-telemetry-master \
+		istio-mixer \
+		./istio-telemetry/mixer-telemetry/ \
+		-t \
+		--set global.configNamespace=istio-control-master \
+		--set global.istioNamespace=istio-system \
+		--set global.telemetryNamespace=istio-telemetry-master \
+		--set global.policyNamespace=istio-policy-master \
+		--set global.mtls.enabled=false \
+		--set policy.enable=false \
+		--set mixer.telemetry.useMCP=false \
+		> ../../kubernetes/istio-telemetry-master/mixer.yaml
 
 .PHONY: istio-config
 istio-config:

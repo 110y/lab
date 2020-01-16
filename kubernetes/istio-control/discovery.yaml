@@ -484,7 +484,7 @@ spec:
       serviceAccountName: istio-pilot-service-account
       containers:
         - name: discovery
-          image: "docker.io/istio/pilot:1.4.0"
+          image: "docker.io/istio/pilot:1.4.3"
           imagePullPolicy: IfNotPresent
           args:
           - "discovery"
@@ -534,7 +534,7 @@ spec:
           - name: config-volume
             mountPath: /etc/istio/config
         - name: istio-proxy
-          image: "docker.io/istio/proxyv2:1.4.0"
+          image: "docker.io/istio/proxyv2:1.4.3"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 15011
