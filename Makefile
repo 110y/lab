@@ -74,7 +74,7 @@ bpf-go:
 	sudo go run ./linux/bpf/helloworld/hello.go &
 	sudo cat /sys/kernel/debug/tracing/trace_pipe
 
-istio-components: istio-discovery istio-autoinject istio-mixer
+istio-components: istio-discovery istio-autoinject istio-mixer istio-grafana istio-prometheus
 istio-components-master: istio-discovery-master istio-autoinject-master istio-mixer-master
 
 .PHONY: istio-crd
@@ -102,10 +102,12 @@ istio-discovery:
 		--set global.istioNamespace=istio-system \
 		--set global.configNamespace=istio-control \
 		--set global.telemetryNamespace=istio-telemetry \
-		--set global.policyNamespace=istio-policy-master \
-		--set policy.enable=false \
+		--set global.policyNamespace=istio-policy \
+		--set policy.enable=true \
 		--set pilot.useMCP=false \
 		--set global.mtls.enabled=false \
+		--set mixer.policy.enabled==true \
+		--set global.disablePolicyChecks=false \
 		> ../../kubernetes/istio-control/discovery.yaml
 
 .PHONY: istio-autoinject
@@ -118,8 +120,10 @@ istio-autoinject:
 		-t \
 		--set sidecarInjectorWebhook.enableNamespacesByDefault=false \
 		--set global.configNamespace=istio-control \
+		--set global.disablePolicyChecks=false \
 		--set global.telemetryNamespace=istio-telemetry \
 		--set istio_cni.enabled=false \
+		--set mixer.policy.enabled==true \
 		> ../../kubernetes/istio-control/autoinject.yaml
 
 .PHONY: istio-mixer
@@ -135,9 +139,40 @@ istio-mixer:
 		--set global.telemetryNamespace=istio-telemetry \
 		--set global.policyNamespace=istio-policy \
 		--set global.mtls.enabled=false \
-		--set policy.enable=false \
+		--set policy.enable=true \
 		--set mixer.telemetry.useMCP=false \
 		> ../../kubernetes/istio-telemetry/mixer.yaml
+
+.PHONY: istio-grafana
+istio-grafana:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-telemetry \
+		istio-grafana  \
+		./istio-telemetry/grafana \
+		-t \
+		--set global.configNamespace=istio-control \
+		--set global.mtls.enabled=false \
+		--set policy.enable=true \
+		--set mixer.telemetry.useMCP=false \
+		> ../../kubernetes/istio-telemetry/grafana.yaml
+
+.PHONY: istio-prometheus
+istio-prometheus:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-telemetry \
+		istio-prometheus \
+		./istio-telemetry/prometheus \
+		-t \
+		--set global.configNamespace=istio-control \
+		--set global.istioNamespace=istio-system \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set global.policyNamespace=istio-policy \
+		--set global.mtls.enabled=false \
+		--set policy.enable=true \
+		--set mixer.telemetry.useMCP=false \
+		> ../../kubernetes/istio-telemetry/prometheus.yaml
 
 .PHONY: istio-discovery-master
 istio-discovery-master:

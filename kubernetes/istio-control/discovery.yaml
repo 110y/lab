@@ -252,8 +252,11 @@ data:
     accessLogFile: ""
 
     enableEnvoyAccessLogService: false
-    mixerCheckServer: istio-policy.istio-policy-master.svc.cluster.local:15004
+    mixerCheckServer: istio-policy.istio-policy.svc.cluster.local:15004
     mixerReportServer: istio-telemetry.istio-telemetry.svc.cluster.local:15004
+    # policyCheckFailOpen allows traffic in cases when the mixer policy service cannot be reached.
+    # Default is false which means the traffic is denied when the client is unable to connect to Mixer.
+    policyCheckFailOpen: false
     # reportBatchMaxEntries is the number of requests that are batched before telemetry data is sent to the mixer server
     reportBatchMaxEntries: 100
     # reportBatchMaxTime is the max waiting time before the telemetry data of a request is sent to the mixer server
@@ -591,7 +594,7 @@ spec:
         secret:
           secretName: istio.istio-pilot-service-account
           optional: true
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:

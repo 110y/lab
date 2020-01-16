@@ -1047,7 +1047,7 @@ spec:
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
 metadata:
-  name: requestsize
+  name: tcpbytesent
   namespace: istio-telemetry
   labels:
     app: istio-telemetry
@@ -1055,7 +1055,7 @@ metadata:
 spec:
   compiledTemplate: metric
   params:
-    value: request.size | 0
+    value: connection.sent.bytes | 0
     dimensions:
       reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
       source_workload: source.workload.name | "unknown"
@@ -1068,15 +1068,11 @@ spec:
       destination_principal: destination.principal | "unknown"
       destination_app: destination.labels["app"] | "unknown"
       destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | conditional((destination.service.name | "unknown") == "unknown", "unknown", request.host)
+      destination_service: destination.service.host | "unknown"
       destination_service_name: destination.service.name | "unknown"
       destination_service_namespace: destination.service.namespace | "unknown"
-      request_protocol: api.protocol | context.protocol | "unknown"
-      response_code: response.code | 200
-      response_flags: context.proxy_error_code | "-"
-      permissive_response_code: rbac.permissive.response_code | "none"
-      permissive_response_policyid: rbac.permissive.effective_policy_id | "none"
       connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
+      response_flags: context.proxy_error_code | "-"
     monitored_resource_type: '"UNSPECIFIED"'
 ---
 # Source: mixer-telemetry/templates/config.yaml
@@ -1115,7 +1111,7 @@ spec:
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
 metadata:
-  name: tcpbytesent
+  name: requestduration
   namespace: istio-telemetry
   labels:
     app: istio-telemetry
@@ -1123,146 +1119,7 @@ metadata:
 spec:
   compiledTemplate: metric
   params:
-    value: connection.sent.bytes | 0
-    dimensions:
-      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
-      source_workload: source.workload.name | "unknown"
-      source_workload_namespace: source.workload.namespace | "unknown"
-      source_principal: source.principal | "unknown"
-      source_app: source.labels["app"] | "unknown"
-      source_version: source.labels["version"] | "unknown"
-      destination_workload: destination.workload.name | "unknown"
-      destination_workload_namespace: destination.workload.namespace | "unknown"
-      destination_principal: destination.principal | "unknown"
-      destination_app: destination.labels["app"] | "unknown"
-      destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
-      destination_service_name: destination.service.name | "unknown"
-      destination_service_namespace: destination.service.namespace | "unknown"
-      connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
-      response_flags: context.proxy_error_code | "-"
-    monitored_resource_type: '"UNSPECIFIED"'
----
-# Source: mixer-telemetry/templates/config.yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: instance
-metadata:
-  name: tcpconnectionsopened
-  namespace: istio-telemetry
-  labels:
-    app: istio-telemetry
-    release: istio-telemetry-istio-mixer
-spec:
-  compiledTemplate: metric
-  params:
-    value: "1"
-    dimensions:
-      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
-      source_workload: source.workload.name | "unknown"
-      source_workload_namespace: source.workload.namespace | "unknown"
-      source_principal: source.principal | "unknown"
-      source_app: source.labels["app"] | "unknown"
-      source_version: source.labels["version"] | "unknown"
-      destination_workload: destination.workload.name | "unknown"
-      destination_workload_namespace: destination.workload.namespace | "unknown"
-      destination_principal: destination.principal | "unknown"
-      destination_app: destination.labels["app"] | "unknown"
-      destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
-      destination_service_name: destination.service.name | "unknown"
-      destination_service_namespace: destination.service.namespace | "unknown"
-      connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
-      response_flags: context.proxy_error_code | "-"
-    monitored_resource_type: '"UNSPECIFIED"'
----
-# Source: mixer-telemetry/templates/config.yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: instance
-metadata:
-  name: tcpbytereceived
-  namespace: istio-telemetry
-  labels:
-    app: istio-telemetry
-    release: istio-telemetry-istio-mixer
-spec:
-  compiledTemplate: metric
-  params:
-    value: connection.received.bytes | 0
-    dimensions:
-      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
-      source_workload: source.workload.name | "unknown"
-      source_workload_namespace: source.workload.namespace | "unknown"
-      source_principal: source.principal | "unknown"
-      source_app: source.labels["app"] | "unknown"
-      source_version: source.labels["version"] | "unknown"
-      destination_workload: destination.workload.name | "unknown"
-      destination_workload_namespace: destination.workload.namespace | "unknown"
-      destination_principal: destination.principal | "unknown"
-      destination_app: destination.labels["app"] | "unknown"
-      destination_version: destination.labels["version"] | "unknown"
-      destination_service: destination.service.host | "unknown"
-      destination_service_name: destination.service.name | "unknown"
-      destination_service_namespace: destination.service.namespace | "unknown"
-      connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
-      response_flags: context.proxy_error_code | "-"
-    monitored_resource_type: '"UNSPECIFIED"'
----
-# Source: mixer-telemetry/templates/config.yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: instance
-metadata:
-  name: attributes
-  namespace: istio-telemetry
-  labels:
-    app: istio-telemetry
-    release: istio-telemetry-istio-mixer
-spec:
-  compiledTemplate: kubernetes
-  params:
-    # Pass the required attribute data to the adapter
-    source_uid: source.uid | ""
-    source_ip: source.ip | ip("0.0.0.0") # default to unspecified ip addr
-    destination_uid: destination.uid | ""
-    destination_port: destination.port | 0
-  attributeBindings:
-    # Fill the new attributes from the adapter produced output.
-    # $out refers to an instance of OutputTemplate message
-    source.ip: $out.source_pod_ip | ip("0.0.0.0")
-    source.uid: $out.source_pod_uid | "unknown"
-    source.labels: $out.source_labels | emptyStringMap()
-    source.name: $out.source_pod_name | "unknown"
-    source.namespace: $out.source_namespace | "default"
-    source.owner: $out.source_owner | "unknown"
-    source.serviceAccount: $out.source_service_account_name | "unknown"
-    source.workload.uid: $out.source_workload_uid | "unknown"
-    source.workload.name: $out.source_workload_name | "unknown"
-    source.workload.namespace: $out.source_workload_namespace | "unknown"
-    destination.ip: $out.destination_pod_ip | ip("0.0.0.0")
-    destination.uid: $out.destination_pod_uid | "unknown"
-    destination.labels: $out.destination_labels | emptyStringMap()
-    destination.name: $out.destination_pod_name | "unknown"
-    destination.container.name: $out.destination_container_name | "unknown"
-    destination.namespace: $out.destination_namespace | "default"
-    destination.owner: $out.destination_owner | "unknown"
-    destination.serviceAccount: $out.destination_service_account_name | "unknown"
-    destination.workload.uid: $out.destination_workload_uid | "unknown"
-    destination.workload.name: $out.destination_workload_name | "unknown"
-    destination.workload.namespace: $out.destination_workload_namespace | "unknown"
----
-# Source: mixer-telemetry/templates/config.yaml
----
-apiVersion: "config.istio.io/v1alpha2"
-kind: instance
-metadata:
-  name: requestcount
-  namespace: istio-telemetry
-  labels:
-    app: istio-telemetry
-    release: istio-telemetry-istio-mixer
-spec:
-  compiledTemplate: metric
-  params:
-    value: "1"
+    value: response.duration | "0ms"
     dimensions:
       reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
       source_workload: source.workload.name | "unknown"
@@ -1290,7 +1147,7 @@ spec:
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
 metadata:
-  name: requestduration
+  name: requestsize
   namespace: istio-telemetry
   labels:
     app: istio-telemetry
@@ -1298,7 +1155,7 @@ metadata:
 spec:
   compiledTemplate: metric
   params:
-    value: response.duration | "0ms"
+    value: request.size | 0
     dimensions:
       reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
       source_workload: source.workload.name | "unknown"
@@ -1360,18 +1217,162 @@ spec:
 ---
 # Source: mixer-telemetry/templates/config.yaml
 apiVersion: "config.istio.io/v1alpha2"
-kind: rule
+kind: instance
 metadata:
-  name: kubeattrgenrulerule
+  name: attributes
   namespace: istio-telemetry
   labels:
     app: istio-telemetry
     release: istio-telemetry-istio-mixer
 spec:
+  compiledTemplate: kubernetes
+  params:
+    # Pass the required attribute data to the adapter
+    source_uid: source.uid | ""
+    source_ip: source.ip | ip("0.0.0.0") # default to unspecified ip addr
+    destination_uid: destination.uid | ""
+    destination_port: destination.port | 0
+  attributeBindings:
+    # Fill the new attributes from the adapter produced output.
+    # $out refers to an instance of OutputTemplate message
+    source.ip: $out.source_pod_ip | ip("0.0.0.0")
+    source.uid: $out.source_pod_uid | "unknown"
+    source.labels: $out.source_labels | emptyStringMap()
+    source.name: $out.source_pod_name | "unknown"
+    source.namespace: $out.source_namespace | "default"
+    source.owner: $out.source_owner | "unknown"
+    source.serviceAccount: $out.source_service_account_name | "unknown"
+    source.workload.uid: $out.source_workload_uid | "unknown"
+    source.workload.name: $out.source_workload_name | "unknown"
+    source.workload.namespace: $out.source_workload_namespace | "unknown"
+    destination.ip: $out.destination_pod_ip | ip("0.0.0.0")
+    destination.uid: $out.destination_pod_uid | "unknown"
+    destination.labels: $out.destination_labels | emptyStringMap()
+    destination.name: $out.destination_pod_name | "unknown"
+    destination.container.name: $out.destination_container_name | "unknown"
+    destination.namespace: $out.destination_namespace | "default"
+    destination.owner: $out.destination_owner | "unknown"
+    destination.serviceAccount: $out.destination_service_account_name | "unknown"
+    destination.workload.uid: $out.destination_workload_uid | "unknown"
+    destination.workload.name: $out.destination_workload_name | "unknown"
+    destination.workload.namespace: $out.destination_workload_namespace | "unknown"
+---
+# Source: mixer-telemetry/templates/config.yaml
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: tcpbytereceived
+  namespace: istio-telemetry
+  labels:
+    app: istio-telemetry
+    release: istio-telemetry-istio-mixer
+spec:
+  compiledTemplate: metric
+  params:
+    value: connection.received.bytes | 0
+    dimensions:
+      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
+      source_workload: source.workload.name | "unknown"
+      source_workload_namespace: source.workload.namespace | "unknown"
+      source_principal: source.principal | "unknown"
+      source_app: source.labels["app"] | "unknown"
+      source_version: source.labels["version"] | "unknown"
+      destination_workload: destination.workload.name | "unknown"
+      destination_workload_namespace: destination.workload.namespace | "unknown"
+      destination_principal: destination.principal | "unknown"
+      destination_app: destination.labels["app"] | "unknown"
+      destination_version: destination.labels["version"] | "unknown"
+      destination_service: destination.service.host | "unknown"
+      destination_service_name: destination.service.name | "unknown"
+      destination_service_namespace: destination.service.namespace | "unknown"
+      connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
+      response_flags: context.proxy_error_code | "-"
+    monitored_resource_type: '"UNSPECIFIED"'
+---
+# Source: mixer-telemetry/templates/config.yaml
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: tcpconnectionsopened
+  namespace: istio-telemetry
+  labels:
+    app: istio-telemetry
+    release: istio-telemetry-istio-mixer
+spec:
+  compiledTemplate: metric
+  params:
+    value: "1"
+    dimensions:
+      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
+      source_workload: source.workload.name | "unknown"
+      source_workload_namespace: source.workload.namespace | "unknown"
+      source_principal: source.principal | "unknown"
+      source_app: source.labels["app"] | "unknown"
+      source_version: source.labels["version"] | "unknown"
+      destination_workload: destination.workload.name | "unknown"
+      destination_workload_namespace: destination.workload.namespace | "unknown"
+      destination_principal: destination.principal | "unknown"
+      destination_app: destination.labels["app"] | "unknown"
+      destination_version: destination.labels["version"] | "unknown"
+      destination_service: destination.service.host | "unknown"
+      destination_service_name: destination.service.name | "unknown"
+      destination_service_namespace: destination.service.namespace | "unknown"
+      connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
+      response_flags: context.proxy_error_code | "-"
+    monitored_resource_type: '"UNSPECIFIED"'
+---
+# Source: mixer-telemetry/templates/config.yaml
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: requestcount
+  namespace: istio-telemetry
+  labels:
+    app: istio-telemetry
+    release: istio-telemetry-istio-mixer
+spec:
+  compiledTemplate: metric
+  params:
+    value: "1"
+    dimensions:
+      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
+      source_workload: source.workload.name | "unknown"
+      source_workload_namespace: source.workload.namespace | "unknown"
+      source_principal: source.principal | "unknown"
+      source_app: source.labels["app"] | "unknown"
+      source_version: source.labels["version"] | "unknown"
+      destination_workload: destination.workload.name | "unknown"
+      destination_workload_namespace: destination.workload.namespace | "unknown"
+      destination_principal: destination.principal | "unknown"
+      destination_app: destination.labels["app"] | "unknown"
+      destination_version: destination.labels["version"] | "unknown"
+      destination_service: destination.service.host | conditional((destination.service.name | "unknown") == "unknown", "unknown", request.host)
+      destination_service_name: destination.service.name | "unknown"
+      destination_service_namespace: destination.service.namespace | "unknown"
+      request_protocol: api.protocol | context.protocol | "unknown"
+      response_code: response.code | 200
+      response_flags: context.proxy_error_code | "-"
+      permissive_response_code: rbac.permissive.response_code | "none"
+      permissive_response_policyid: rbac.permissive.effective_policy_id | "none"
+      connection_security_policy: conditional((context.reporter.kind | "inbound") == "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
+    monitored_resource_type: '"UNSPECIFIED"'
+---
+# Source: mixer-telemetry/templates/config.yaml
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: promtcpconnectionclosed
+  namespace: istio-telemetry
+  labels:
+    app: istio-telemetry
+    release: istio-telemetry-istio-mixer
+spec:
+  match: context.protocol == "tcp" && ((connection.event | "na") == "close")
   actions:
-  - handler: kubernetesenv
+  - handler: prometheus
     instances:
-    - attributes
+    - tcpconnectionsclosed
 ---
 # Source: mixer-telemetry/templates/config.yaml
 apiVersion: "config.istio.io/v1alpha2"
@@ -1388,6 +1389,23 @@ spec:
   - handler: kubernetesenv
     instances:
     - attributes
+---
+# Source: mixer-telemetry/templates/config.yaml
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: promtcp
+  namespace: istio-telemetry
+  labels:
+    app: istio-telemetry
+    release: istio-telemetry-istio-mixer
+spec:
+  match: context.protocol == "tcp"
+  actions:
+  - handler: prometheus
+    instances:
+    - tcpbytesent
+    - tcpbytereceived
 ---
 # Source: mixer-telemetry/templates/config.yaml
 apiVersion: "config.istio.io/v1alpha2"
@@ -1428,31 +1446,13 @@ spec:
 apiVersion: "config.istio.io/v1alpha2"
 kind: rule
 metadata:
-  name: promtcpconnectionclosed
+  name: kubeattrgenrulerule
   namespace: istio-telemetry
   labels:
     app: istio-telemetry
     release: istio-telemetry-istio-mixer
 spec:
-  match: context.protocol == "tcp" && ((connection.event | "na") == "close")
   actions:
-  - handler: prometheus
+  - handler: kubernetesenv
     instances:
-    - tcpconnectionsclosed
----
-# Source: mixer-telemetry/templates/config.yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: rule
-metadata:
-  name: promtcp
-  namespace: istio-telemetry
-  labels:
-    app: istio-telemetry
-    release: istio-telemetry-istio-mixer
-spec:
-  match: context.protocol == "tcp"
-  actions:
-  - handler: prometheus
-    instances:
-    - tcpbytesent
-    - tcpbytereceived
+    - attributes
