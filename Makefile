@@ -174,6 +174,23 @@ istio-prometheus:
 		--set mixer.telemetry.useMCP=false \
 		> ../../kubernetes/istio-telemetry/prometheus.yaml
 
+.PHONY: istio-policy
+istio-policy:
+	@cd ./_third_party/istio-installer && \
+		ISTIO_ENV=istio-control HUB=docker.io/istio TAG=${ISTIO_VERSION} ./bin/iop \
+		istio-policy \
+		istio-policy \
+		./istio-policy \
+		-t \
+		--set global.configNamespace=istio-control \
+		--set global.istioNamespace=istio-system \
+		--set global.telemetryNamespace=istio-telemetry \
+		--set global.policyNamespace=istio-policy \
+		--set global.mtls.enabled=false \
+		--set policy.enable=true \
+		--set global.useMCP=false \
+		> ../../kubernetes/istio-policy/mixer.yaml
+
 .PHONY: istio-discovery-master
 istio-discovery-master:
 	@cd ./_third_party/istio-installer && \
