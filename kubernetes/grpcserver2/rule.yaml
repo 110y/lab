@@ -1,0 +1,66 @@
+# ---
+# apiVersion: "config.istio.io/v1alpha2"
+# kind: instance
+# metadata:
+#   name: source-namespace
+#   namespace: istio-telemetry
+# spec:
+#   compiledTemplate: listentry
+#   params:
+#     value: source.namespace
+
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: denyrequest
+  # namespace: istio-telemetry
+  namespace: grpcserver1
+spec:
+  compiledTemplate: checknothing
+
+# ---
+# apiVersion: "config.istio.io/v1alpha2"
+# kind: handler
+# metadata:
+#   name: namespace-whitelist
+#   namespace: istio-telemetry
+# spec:
+#   compiledAdapter: listchecker
+#   params:
+#     overrides:
+#       - grpcserver1
+#     blacklist: true
+
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: handler
+metadata:
+  name: denial
+  # namespace: istio-telemetry
+  namespace: grpcserver1
+spec:
+  compiledAdapter: denier
+  params:
+    status:
+      code: 7
+      message: Not allowed
+
+---
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: namespace-checker
+  # namespace: istio-telemetry
+  namespace: grpcserver1
+spec:
+  match: destination.namespace == "grpcserver2"
+  actions:
+    - handler: denial
+      instances:
+        - denyrequest
+  # request_header_operations:
+  #   - name: foo
+  #     operation: APPEND
+  #     values:
+  #       - request.headers["user-agent"]
