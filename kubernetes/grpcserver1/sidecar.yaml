@@ -1,0 +1,12 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: egress-whitelist
+  namespace: grpcserver1
+spec:
+  egress:
+    - hosts:
+        - "grpcserver2/*"
+        - "istio-system/*"
+        - "istio-control/*"
