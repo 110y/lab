@@ -1,0 +1,6 @@
+TEXT ·Sum(SB),$0-24
+	MOVQ b+16(SP), AX
+	MOVQ a+8(SP), CX
+	ADDQ CX, AX
+	MOVQ AX, r2+24(SP)
+	RET
