@@ -38,7 +38,9 @@ type HelloWorldReconciler struct {
 
 func (r *HelloWorldReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
-	_ = r.Log.WithValues("helloworld", req.NamespacedName)
+	l := r.Log.WithValues("helloworld", req.NamespacedName)
+
+	l.Info("Reconciling...")
 
 	// your logic here
 
