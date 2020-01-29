@@ -2,6 +2,13 @@ ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
 ISTIO_VERSION := 1.4.3
 ISTIO_VERSION_CANARY := 1.4.1
 
+KUSTOMIZE_VERSION := 3.5.4
+KUSTOMIZE_BIN := docker run \
+	--rm \
+	--volume $(shell pwd):/usr/local/src/lab \
+	--workdir /usr/local/src/lab \
+	110y/kustomize:${KUSTOMIZE_VERSION}
+
 .PHONY: go-bazel-helloworld-binary
 go-bazel-helloworld-binary:
 	@cd ./go/bazel/container && \
@@ -79,7 +86,8 @@ istio-components-master: istio-discovery-master istio-autoinject-master istio-mi
 
 .PHONY: istio-crd
 istio-crd:
-	kustomize build ./_third_party/istio-installer/base > ./kubernetes/crd/istio.yaml
+	# @$(KUSTOMIZE_BIN) build ./_third_party/istio/manifests/base > ./kubernetes/crd/istio.yaml
+	$(KUSTOMIZE_BIN) build ./_third_party/istio-installer/base > ./kubernetes/crd/istio.yaml
 
 .PHONY: istio-citadel
 istio-citadel:
