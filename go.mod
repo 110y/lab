@@ -7,6 +7,7 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/iovisor/gobpf v0.0.0-20191118183823-240d5093eb2e
+	github.com/lestrrat-go/jwx v0.9.0
 	github.com/stripe/stripe-go v63.1.0+incompatible
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413 // indirect
 	golang.org/x/net v0.0.0-20191126235420-ef20fe5d7933 // indirect
