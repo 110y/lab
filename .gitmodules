@@ -13,3 +13,6 @@
 [submodule "cc/jwt/third_party/jwt-cpp"]
 	path = cc/jwt/third_party/jwt-cpp
 	url = git@github.com:Thalhammer/jwt-cpp.git
+[submodule "_third_party/istio"]
+	path = _third_party/istio
+	url = git@github.com:istio/istio.git
