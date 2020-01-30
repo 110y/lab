@@ -3,6 +3,7 @@ package handler
 import (
 	"crypto/rsa"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/lestrrat-go/jwx/jwk"
@@ -13,6 +14,8 @@ type JWKS struct {
 }
 
 func (h *JWKS) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("ACCESS: JWKS")
+
 	key, err := jwk.New(h.PrivateKey)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
