@@ -2,6 +2,15 @@
 version: "3.7"
 
 services:
+  go:
+    build:
+      context: ./containers/go
+    working_dir: /usr/local/src/lab
+    volumes:
+      - ./:/usr/local/src/lab:cached
+    environment:
+      CONTAINER_REGISTRY: ${CONTAINER_REGISTRY}
+
   protoc:
     build:
       context: ./containers/protoc
