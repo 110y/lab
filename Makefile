@@ -262,3 +262,7 @@ lab-cluster:
 controller-runtime-example-container:
 	docker build -f ./kubernetes/controller-runtime/Dockerfile -t registry:5000/controller-runtime-example:latest .
 	docker push registry:5000/controller-runtime-example:latest
+
+.PHONY: gotools
+gotools:
+	go build -o ./bin/envsubst github.com/a8m/envsubst/cmd/envsubst

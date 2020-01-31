@@ -1,6 +1,7 @@
 module github.com/110y/lab
 
 require (
+	github.com/a8m/envsubst v1.1.1-0.20190702133146-5112818ee579
 	github.com/atotto/clipboard v0.1.2
 	github.com/elastic/go-elasticsearch/v7 v7.3.0
 	github.com/go-logr/logr v0.1.0
