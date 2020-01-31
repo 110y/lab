@@ -7,5 +7,5 @@ metadata:
 spec:
   origins:
     - jwt:
-        issuer: "testing@secure.istio.io"
-        jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.4/security/tools/jwt/samples/jwks.json"
+        issuer: "authority.authority.svc.cluster.local"
+        jwksUri: "http://authority.authority.svc.cluster.local:8080/jwks"
