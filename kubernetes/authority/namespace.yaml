@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: authority
+  labels:
+    istio-env: istio-control
+    istio-injection: enabled

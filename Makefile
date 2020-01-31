@@ -1,3 +1,6 @@
+include .env
+export
+
 ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
 ISTIO_VERSION := 1.4.3
 ISTIO_VERSION_CANARY := 1.4.1
@@ -266,3 +269,15 @@ controller-runtime-example-container:
 .PHONY: gotools
 gotools:
 	go build -o ./bin/envsubst github.com/a8m/envsubst/cmd/envsubst
+
+.PHONY: authority-container
+authority-container:
+	docker build -t $${CONTAINER_REGISTRY}/authority:$(shell git rev-parse --short HEAD) -f ./envoy/authority/Dockerfile .
+
+.PHONY: authority-registry
+authority-registry: authority-container
+	docker push $${CONTAINER_REGISTRY}/authority:$(shell git rev-parse --short HEAD)
+
+.PHONY: authority-deploy
+authority-deploy:
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/authority/deployment.yaml | kubectl apply -f -

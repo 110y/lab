@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: authority
+  name: authority
+  namespace: authority
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: authority
+  strategy:
+    rollingUpdate:
+      maxSurge: 0%
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: authority
+    spec:
+      containers:
+        - image: ${CONTAINER_REGISTRY}/authority:62182b4
+          imagePullPolicy: Always
+          name: authority
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
