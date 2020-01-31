@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/lestrrat-go/jwx/jwk"
+	"github.com/lestrrat-go/jwx/jws"
 )
 
 type JWKS struct {
@@ -18,12 +19,24 @@ func (h *JWKS) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	key, err := jwk.New(h.PrivateKey)
 	if err != nil {
+		fmt.Printf("failed to create jwk: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	b, err := json.Marshal(key)
+	if err := key.Set(jws.KeyIDKey, kid); err != nil {
+		fmt.Printf("failed to set kid: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	keys := jwk.Set{
+		Keys: []jwk.Key{key},
+	}
+
+	b, err := json.Marshal(keys)
 	if err != nil {
+		fmt.Printf("failed to marshal json: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
