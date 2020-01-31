@@ -23,7 +23,7 @@ spec:
         app: authority
     spec:
       containers:
-        - image: ${CONTAINER_REGISTRY}/authority:62182b4
+        - image: ${CONTAINER_REGISTRY}/authority:720cba1
           imagePullPolicy: Always
           name: authority
           ports:
