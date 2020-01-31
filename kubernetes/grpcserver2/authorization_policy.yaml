@@ -1,0 +1,12 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-all
+  namespace: grpcserver2
+spec:
+  rules:
+    - when:
+        - key: request.auth.claims[iss]
+          values:
+            - "testing@secure.istio.io"
