@@ -17,6 +17,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -37,12 +38,18 @@ type HelloWorldReconciler struct {
 // +kubebuilder:rbac:groups=labolith.labolith.com,resources=helloworlds/status,verbs=get;update;patch
 
 func (r *HelloWorldReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
-	_ = context.Background()
+	ctx := context.Background()
 	l := r.Log.WithValues("helloworld", req.NamespacedName)
 
-	l.Info("Reconciling...")
-
 	// your logic here
+
+	var helloworld labolithv1.HelloWorld
+	if err := r.Get(ctx, req.NamespacedName, &helloworld); err != nil {
+		l.Error(err, "unable to fetch HelloWorld")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	l.Info(fmt.Sprintf("HELLOWORLD: %s", helloworld.Spec.Foo))
 
 	return ctrl.Result{}, nil
 }

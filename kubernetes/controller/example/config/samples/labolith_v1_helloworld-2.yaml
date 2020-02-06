@@ -1,0 +1,7 @@
+apiVersion: labolith.labolith.com/v1
+kind: HelloWorld
+metadata:
+  name: helloworld-sample-2
+spec:
+  # Add fields here
+  foo: '2'
