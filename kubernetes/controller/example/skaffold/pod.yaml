@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubebuilder-example
+  namespace: kubebuilder-example
+spec:
+  containers:
+    - name: foo
+      image: bar

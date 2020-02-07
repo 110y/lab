@@ -75,6 +75,10 @@ crd: manifests
 apply-crd: crd
 	@kubectl apply -f ./config/crd/helloworld-crd.yaml
 
+.PHONY: skaffold-run
+skaffold-run:
+	skaffold run --filename=./skaffold/skaffold.yaml
+
 # find or download controller-gen
 # download controller-gen if necessary
 # controller-gen:
