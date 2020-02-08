@@ -18,6 +18,23 @@ services:
     volumes:
       - ./:/usr/local/src/lab:cached
 
+  go-control-plane:
+    build:
+      context: ./containers/go
+    working_dir: /usr/local/src/lab
+    volumes:
+      - ./:/usr/local/src/lab:cached
+    ports:
+      - ${GO_CONTROL_PLANE_PORT}:8081
+    command: go run ./go/control_plane
+
+  envoy-data-plane:
+    image: envoyproxy/envoy:v1.12.2
+    volumes:
+      - ./envoy/control-plane/envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - ${ENVOY_DATA_PLANE_ADMIN_PORT}:15000
+
   emscripten:
     build:
       context: ./cc/emscripten

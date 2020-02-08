@@ -4,6 +4,7 @@ require (
 	github.com/a8m/envsubst v1.1.1-0.20190702133146-5112818ee579
 	github.com/atotto/clipboard v0.1.2
 	github.com/elastic/go-elasticsearch/v7 v7.3.0
+	github.com/envoyproxy/go-control-plane v0.9.2
 	github.com/go-logr/logr v0.1.0
 	github.com/golang/protobuf v1.3.2
 	github.com/imdario/mergo v0.3.8 // indirect
@@ -14,7 +15,7 @@ require (
 	golang.org/x/net v0.0.0-20191126235420-ef20fe5d7933 // indirect
 	golang.org/x/sys v0.0.0-20191128015809-6d18c012aee9 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	google.golang.org/grpc v1.24.0
+	google.golang.org/grpc v1.25.1
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 	k8s.io/api v0.17.0
 	k8s.io/apimachinery v0.17.0
