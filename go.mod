@@ -6,11 +6,13 @@ require (
 	github.com/elastic/go-elasticsearch/v7 v7.3.0
 	github.com/envoyproxy/go-control-plane v0.9.2
 	github.com/go-logr/logr v0.1.0
+	github.com/go-logr/zapr v0.1.1
 	github.com/golang/protobuf v1.3.2
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/iovisor/gobpf v0.0.0-20191118183823-240d5093eb2e
 	github.com/lestrrat-go/jwx v0.9.0
 	github.com/stripe/stripe-go v63.1.0+incompatible
+	go.uber.org/zap v1.14.0
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413 // indirect
 	golang.org/x/net v0.0.0-20191126235420-ef20fe5d7933 // indirect
 	golang.org/x/sys v0.0.0-20191128015809-6d18c012aee9 // indirect
