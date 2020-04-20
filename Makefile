@@ -282,3 +282,10 @@ authority-registry: authority-container
 .PHONY: authority-deploy
 authority-deploy:
 	docker-compose run --rm go ./bin/envsubst < ./kubernetes/authority/deployment.yaml | kubectl apply -f -
+
+.PHONY: kube-istio-lab
+kube-istio-lab:
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/origin-service.yaml | kubectl apply -f -
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/replication-service.yaml | kubectl apply -f -
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/destination.yaml | kubectl apply -f -
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/virtual_service.yaml | kubectl apply -f -
