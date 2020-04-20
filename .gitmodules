@@ -16,3 +16,6 @@
 [submodule "_third_party/istio"]
 	path = _third_party/istio
 	url = git@github.com:istio/istio.git
+[submodule "_third_party/proxy-wasm-cpp-sdk"]
+	path = _third_party/proxy-wasm-cpp-sdk
+	url = git@github.com:proxy-wasm/proxy-wasm-cpp-sdk.git
