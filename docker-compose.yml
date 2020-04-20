@@ -83,11 +83,13 @@ services:
       - ${ENVOY_FILTER_HELLO_PORT}:10000
 
   envoy-filter-wasm:
-    image: envoyproxy/envoy:v1.12.2
+    image: envoyproxy/envoy:v1.13.1
     volumes:
       - ./bin/envoy-wasm:/usr/local/bin/envoy
       - ./envoy/filter/wasm/envoy.yaml:/etc/envoy/envoy.yaml
-      - ./envoy/filter/wasm/filter.wasm:/etc/envoy/filter.wasm
+      # - ./envoy/filter/wasm/filter.wasm:/etc/envoy/filter.wasm
+      # - ./_third_party/envoy-wasm/examples/wasm/envoy_filter_http_wasm_example.wasm:/etc/envoy/filter.wasm
+      - ./wasm/proxy-wasm/hello/myproject.wasm:/etc/envoy/filter.wasm
     ports:
       - ${ENVOY_FILTER_WASM_PORT}:10000
 

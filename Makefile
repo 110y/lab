@@ -70,6 +70,7 @@ envoy-wasm-sdk:
 .PHONY: envoy-wasm-filter
 envoy-wasm-filter:
 	docker run -v $$PWD/envoy/filter/wasm/:/work -w /work envoy-wasm-sdk:v2 /build_wasm.sh
+	# docker run -v $$PWD/envoy/filter/wasm/:/work -w /work proxywasmsdk:v2 /build_wasm.sh
 
 .PHONY: ubuntu
 ubuntu:
