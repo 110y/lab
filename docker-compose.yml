@@ -42,6 +42,13 @@ services:
     volumes:
       - ./:/usr/local/src/lab:cached
 
+  grpc-test-envoy:
+    image: envoyproxy/envoy:v1.14.1
+    ports:
+      - ${GRPC_TEST_ENVOY_PORT}:10000
+    volumes:
+      - ./envoy/grpc-test/envoy.yaml:/etc/envoy/envoy.yaml
+
   grpc-web-envoy:
     image: envoyproxy/envoy:v1.12.0
     ports:

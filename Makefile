@@ -260,7 +260,8 @@ istio-config:
 
 .PHONY: lab-cluster
 lab-cluster:
-	kind create cluster --name lab
+	kind delete cluster --name lab
+	kind create cluster --name lab --image kindest/node:v1.18.0
 
 .PHONY: controller-runtime-example-container
 controller-runtime-example-container:
