@@ -85,7 +85,8 @@ static_resources:
                               timeout: 1s
                             cache_duration:
                               seconds: 300
-                          payload_in_metadata: jwt_payload
+                          # payload_in_metadata: jwt_payload
+                          payload_in_metadata: testing@secure.istio.io
                       rules:
                         - match:
                             prefix: /
@@ -99,7 +100,7 @@ static_resources:
                           local meta = request_handle:streamInfo():dynamicMetadata()
                           for key, value in pairs(meta) do
                             request_handle:logInfo("extract dynamicMetadata key: "..key)
-                            request_handle:logInfo("extract dynamicMetadata value: "..value.jwt_payload.foo)
+                            request_handle:logInfo("extract dynamicMetadata value: "..value["testing@secure.istio.io"].foo)
                           end
                         end
                   - name: envoy.router
