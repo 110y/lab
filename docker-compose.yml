@@ -113,3 +113,10 @@ services:
     volumes:
       - ./:/usr/local/src/workspace:cached
       - ${HOME}/.config/gcloud/application_default_credentials.json:/etc/google_application_default_credentials.json
+
+  authority:
+    build:
+      context: ./
+      dockerfile: ./envoy/authority/Dockerfile
+    ports:
+      - ${AUTHORITY_PORT}:8080

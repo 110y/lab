@@ -1,4 +1,4 @@
-FROM golang:1.13.7-alpine3.10 AS builder
+FROM golang:1.14.3-buster AS builder
 
 ENV GO111MODULE=on
 ENV GOOS=linux
@@ -8,11 +8,9 @@ COPY . .
 RUN go build -o authority ./envoy/authority
 
 # runtime image
-FROM alpine:3.10.2
+FROM gcr.io/distroless/base:3c213222937de49881c57c476e64138a7809dc54
 
 COPY --from=builder /go/src/github.com/110y/lab/authority /usr/local/bin/authority
-RUN apk update
-RUN apk add --no-cache ca-certificates
 
 EXPOSE 8080
 
