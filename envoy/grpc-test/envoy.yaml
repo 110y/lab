@@ -9,6 +9,18 @@ admin:
 
 static_resources:
   clusters:
+    - name: authority
+      connect_timeout: 1s
+      type: LOGICAL_DNS
+      load_assignment:
+        cluster_name: authority
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: authority
+                      port_value: 8080
     - name: upstream
       connect_timeout: 1s
       type: LOGICAL_DNS
@@ -61,4 +73,33 @@ static_resources:
                         upstream_cluster: '%UPSTREAM_CLUSTER%'
                         hostname: '%HOSTNAME%'
                 http_filters:
+                  - name: envoy.filters.http.jwt_authn
+                    config:
+                      providers:
+                        authority:
+                          issuer: authority.authority.svc.cluster.local
+                          remote_jwks:
+                            http_uri:
+                              uri: http://authority:8080/jwks
+                              cluster: authority
+                              timeout: 1s
+                            cache_duration:
+                              seconds: 300
+                          payload_in_metadata: jwt_payload
+                      rules:
+                        - match:
+                            prefix: /
+                          requires:
+                            provider_name: authority
+                  - name: envoy.lua
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.config.filter.http.lua.v2.Lua
+                      inline_code: |
+                        function envoy_on_request(request_handle)
+                          local meta = request_handle:streamInfo():dynamicMetadata()
+                          for key, value in pairs(meta) do
+                            request_handle:logInfo("extract dynamicMetadata key: "..key)
+                            request_handle:logInfo("extract dynamicMetadata value: "..value.jwt_payload.foo)
+                          end
+                        end
                   - name: envoy.router

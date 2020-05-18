@@ -46,6 +46,7 @@ services:
     image: envoyproxy/envoy:v1.14.1
     ports:
       - ${GRPC_TEST_ENVOY_PORT}:10000
+      - ${GRPC_TEST_ENVOY_ADMIN_PORT}:15000
     volumes:
       - ./envoy/grpc-test/envoy.yaml:/etc/envoy/envoy.yaml
 

@@ -31,6 +31,12 @@ func (j *JWT) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := token.Set("foo", "bar"); err != nil {
+		fmt.Printf("failed to set foo: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	headers := &jws.StandardHeaders{}
 	if err := headers.Set(jws.KeyIDKey, kid); err != nil {
 		fmt.Printf("failed to set kid: %s", err)
