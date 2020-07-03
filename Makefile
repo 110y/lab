@@ -290,3 +290,7 @@ kube-istio-lab:
 	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/replication-service.yaml | kubectl apply -f -
 	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/destination.yaml | kubectl apply -f -
 	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/virtual_service.yaml | kubectl apply -f -
+
+.PHONY: rust-hello
+rust-hello:
+	rustc -o bin/rust_hello ./rust/hello/main.rs
