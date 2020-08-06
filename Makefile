@@ -261,7 +261,13 @@ istio-config:
 .PHONY: lab-cluster
 lab-cluster:
 	kind delete cluster --name lab
-	kind create cluster --name lab --image kindest/node:v1.18.0
+	kind create cluster --name lab --image kindest/node:v1.18.4
+	make lab-istio
+	skaffold run --filename=./kubernetes/skaffold/skaffold.yaml
+
+.PHONY: lab-istio
+lab-istio:
+	istioctl install -y
 
 .PHONY: controller-runtime-example-container
 controller-runtime-example-container:

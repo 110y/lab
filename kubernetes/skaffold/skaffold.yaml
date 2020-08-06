@@ -1,0 +1,13 @@
+---
+apiVersion: skaffold/v2beta5
+kind: Config
+build:
+  artifacts:
+    - image: authority
+      docker:
+        dockerfile: ./envoy/authority/Dockerfile
+
+deploy:
+  kubectl:
+    manifests:
+      - ./kubernetes/skaffold/deployment.yaml
