@@ -1,0 +1,55 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: jwt-filter
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      authority-jwt: enabled
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.jwt_authn
+          typed_config:
+            "@type": "type.googleapis.com/envoy.config.filter.http.jwt_authn.v2alpha.JwtAuthentication"
+            providers:
+              authority_jwks:
+                issuer: "authority.authority.svc.cluster.local"
+                remote_jwks:
+                  http_uri:
+                    uri: "http://authority.authority.svc.cluster.local:8080/jwks"
+                    cluster: "outbound|8080||authority.authority.svc.cluster.local"
+                    timeout: 1s
+                  cache_duration: 3600s
+                forward: true
+                payload_in_metadata: "jwt_authority"
+              authority2_jwks:
+                issuer: "authority.authority.svc.cluster.local"
+                remote_jwks:
+                  http_uri:
+                    uri: "http://authority-2.authority.svc.cluster.local:8080/jwks"
+                    cluster: "outbound|8080||authority-2.authority.svc.cluster.local"
+                    timeout: 1s
+                  cache_duration: 3600s
+                forward: true
+                payload_in_metadata: "jwt_authority"
+            rules:
+              - match:
+                  prefix: /
+                requires:
+                  requires_any:
+                    requirements:
+                      - provider_name: authority_jwks
+                      - provider_name: authority2_jwks
+                      # - allow_missing_or_failed: {}
