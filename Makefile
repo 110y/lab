@@ -36,6 +36,13 @@ pb:
 		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:proto/echo \
 		--go_out=plugins=grpc:proto/echo \
 		proto/echo/*.proto
+	docker-compose run --rm protoc \
+		protoc \
+		--proto_path=proto/grpcserver \
+		--js_out=import_style=commonjs:proto/grpcserver \
+		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:proto/grpcserver \
+		--go_out=plugins=grpc:proto/grpcserver \
+		proto/grpcserver/*.proto
 
 ./cc/emscripten/a.out.js: ./cc/emscripten/test.cc
 	docker-compose run --rm emscripten /usr/local/src/emscripten/emcc -o ./cc/emscripten/a.out.js ./cc/emscripten/test.cc

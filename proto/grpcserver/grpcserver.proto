@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package grpcserver;
+
+option go_package = "pb";
+
+import "google/protobuf/empty.proto";
+
+service Info {
+  rpc ServerInfo(google.protobuf.Empty) returns (ServerInfoResponse);
+}
+
+message ServerInfoResponse {
+  string name = 1;
+}

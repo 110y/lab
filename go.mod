@@ -11,6 +11,7 @@ require (
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/iovisor/gobpf v0.0.0-20191118183823-240d5093eb2e
 	github.com/lestrrat-go/jwx v0.9.0
+	github.com/pkg/errors v0.8.1
 	github.com/stripe/stripe-go v63.1.0+incompatible
 	go.uber.org/zap v1.14.0
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413 // indirect

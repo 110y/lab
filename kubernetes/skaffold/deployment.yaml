@@ -17,3 +17,45 @@ spec:
   containers:
     - name: authority
       image: authority
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: authority-2
+  namespace: authority
+  labels:
+    app: authority-2
+spec:
+  containers:
+    - name: authority
+      image: authority
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authority
+  namespace: authority
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: authority
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authority-2
+  namespace: authority
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: authority-2

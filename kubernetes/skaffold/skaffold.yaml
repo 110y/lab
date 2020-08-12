@@ -6,8 +6,16 @@ build:
     - image: authority
       docker:
         dockerfile: ./envoy/authority/Dockerfile
+    - image: grpcserver1
+      docker:
+        dockerfile: ./go/grpc/grpcserver1/Dockerfile
+    - image: grpcserver2
+      docker:
+        dockerfile: ./go/grpc/grpcserver2/Dockerfile
 
 deploy:
   kubectl:
     manifests:
       - ./kubernetes/skaffold/deployment.yaml
+      - ./kubernetes/skaffold/grpcserver1/deployment.yaml
+      - ./kubernetes/skaffold/grpcserver2/deployment.yaml
