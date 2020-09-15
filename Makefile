@@ -265,10 +265,10 @@ istio-config:
 		./istio-control/istio-config \
 		--set configValidation=true
 
-.PHONY: lab-cluster
-lab-cluster:
+.PHONY: kind-cluster
+kind-cluster:
 	kind delete cluster --name lab
-	kind create cluster --name lab --image kindest/node:v1.18.4
+	kind create cluster --name lab --image kindest/node:v1.19.1
 	make lab-istio
 	skaffold run --filename=./kubernetes/skaffold/skaffold.yaml
 
