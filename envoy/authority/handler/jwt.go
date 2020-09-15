@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jws"
@@ -14,8 +15,8 @@ import (
 var _ http.Handler = &JWT{}
 
 const (
-	issuer = "authority.authority.svc.cluster.local"
-	kid    = "c0e21c71-f442-4340-a994-48f648fa88c2"
+	// issuer = "authority.authority.svc.cluster.local"
+	kid = "c0e21c71-f442-4340-a994-48f648fa88c2"
 )
 
 type JWT struct {
@@ -25,7 +26,13 @@ type JWT struct {
 func (j *JWT) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	token := jwt.New()
 
-	if err := token.Set(jwt.IssuerKey, issuer); err != nil {
+	host, err := os.Hostname()
+	if err != nil {
+		fmt.Printf("failed to get host: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	if err := token.Set(jwt.IssuerKey, host); err != nil {
 		fmt.Printf("failed to set iss: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
