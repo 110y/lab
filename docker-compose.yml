@@ -90,6 +90,15 @@ services:
     ports:
       - ${ENVOY_FILTER_HELLO_PORT}:10000
 
+  envoy-wasm:
+    build:
+      context: ./envoy/filter/wasm-rust
+    volumes:
+      - ./envoy/filter/wasm-rust/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./envoy/filter/wasm-rust/target/wasm32-unknown-unknown/release/wasm_rust.wasm:/etc/envoy/filter.wasm
+    ports:
+      - ${ENVOY_WASM_PORT}:10000
+
   envoy-filter-wasm:
     image: envoyproxy/envoy:v1.13.1
     volumes:
