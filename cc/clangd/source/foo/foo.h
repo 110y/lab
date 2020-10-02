@@ -1,8 +1,9 @@
 namespace foo {
 
 class Foo {
-   public:
-    int foo;
+public:
+  int foo;
+  void Run();
 };
 
-}  // namespace foo
+} // namespace foo
