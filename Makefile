@@ -270,7 +270,13 @@ kind-cluster:
 	kind delete cluster --name lab
 	kind create cluster --name lab --image kindest/node:v1.19.1
 	make lab-istio
-	skaffold run --filename=./kubernetes/skaffold/skaffold.yaml
+	# skaffold run --filename=./kubernetes/skaffold/skaffold.yaml
+	docker build -t ghcr.io/110y/lab/grpcserver1:latest ./go/grpc/grpcserver1
+	kind load docker-image ghcr.io/110y/lab/grpcserver1:latest --name lab
+	docker build -t ghcr.io/110y/lab/grpcserver2:latest ./go/grpc/grpcserver2
+	kind load docker-image ghcr.io/110y/lab/grpcserver2:latest --name lab
+	kubectl apply -f kubernetes/grpcserver1/deployment.yaml
+	kubectl apply -f kubernetes/grpcserver2/deployment.yaml
 
 .PHONY: lab-istio
 lab-istio:
