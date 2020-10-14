@@ -1,8 +1,11 @@
 include .env
 export
 
+GOOS   := $(shell go env GOOS)
+GOARCH := $(shell go env GOARCH)
+
 ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
-ISTIO_VERSION := 1.4.3
+ISTIO_VERSION := 1.6.8
 ISTIO_VERSION_CANARY := 1.4.1
 
 KUSTOMIZE_VERSION := 3.5.4
@@ -11,6 +14,11 @@ KUSTOMIZE_BIN := docker run \
 	--volume $(shell pwd):/usr/local/src/lab \
 	--workdir /usr/local/src/lab \
 	110y/kustomize:${KUSTOMIZE_VERSION}
+
+.PHONY: istioctl
+istioctl:
+	curl -sSL "https://storage.googleapis.com/istio-release/releases/${ISTIO_VERSION}/istioctl-${ISTIO_VERSION}-${GOOS}-${GOARCH}.tar.gz" | tar -C /tmp -xzv istioctl
+	mv /tmp/istioctl ./bin/istioctl
 
 .PHONY: go-bazel-helloworld-binary
 go-bazel-helloworld-binary:
@@ -280,7 +288,7 @@ kind-cluster:
 
 .PHONY: lab-istio
 lab-istio:
-	istioctl install -y
+	./bin/istioctl install -y
 
 .PHONY: controller-runtime-example-container
 controller-runtime-example-container:
