@@ -5,7 +5,7 @@ GOOS   := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 
 ENVOY_BUILD_UBUNTU_VERSION := d06dad145694f1a7a02b5c6d0c75b32f753db2dd
-ISTIO_VERSION := 1.7.3
+ISTIO_VERSION := 1.7.4
 ISTIO_VERSION_CANARY := 1.4.1
 
 KUSTOMIZE_VERSION := 3.5.4
@@ -285,6 +285,7 @@ kind-cluster:
 	kind load docker-image ghcr.io/110y/lab/grpcserver2:latest --name lab
 	kubectl apply -f kubernetes/grpcserver1/deployment.yaml
 	kubectl apply -f kubernetes/grpcserver2/deployment.yaml
+	kubectl config set-context $(shell kubectl config current-context) --namespace=grpcserver1
 
 .PHONY: lab-istio
 lab-istio:
