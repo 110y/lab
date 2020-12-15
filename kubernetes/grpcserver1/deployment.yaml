@@ -28,10 +28,11 @@ spec:
     metadata:
       labels:
         app: grpcserver1
+        authority-jwt: enabled
     spec:
       containers:
-        - image: ghcr.io/110y/lab/grpcserver1:latest
-          imagePullPolicy: IfNotPresent
+        - image: ${CONTAINER_REGISTRY}/grpcserver1:404c41a
+          imagePullPolicy: Always
           name: grpcserver1
           ports:
             - containerPort: 9000
@@ -39,7 +40,7 @@ spec:
               protocol: TCP
           env:
             - name: GRPCSERVER2_ENDPOINT
-              value: 'grpcserver2.grpcserver2.svc.cluster.local:9000'
+              value: 'grpcserver2.grpcserver2.svc.cluster.local:7000'
 ---
 apiVersion: v1
 kind: Service

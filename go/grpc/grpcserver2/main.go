@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	grpcPort             = 9000
+	grpcPort             = 7000
 	statusFailedToListen = 1
 	statusFailedToServe  = 2
 )

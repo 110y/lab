@@ -312,6 +312,14 @@ authority-registry: authority-container
 authority-deploy:
 	docker-compose run --rm go ./bin/envsubst < ./kubernetes/authority/deployment.yaml | kubectl apply -f -
 
+.PHONY: grpcserver1-deploy
+grpcserver1-deploy:
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/grpcserver1/deployment.yaml | kubectl apply -f -
+
+.PHONY: grpcserver2-deploy
+grpcserver2-deploy:
+	docker-compose run --rm go ./bin/envsubst < ./kubernetes/grpcserver2/deployment.yaml | kubectl apply -f -
+
 .PHONY: kube-istio-lab
 kube-istio-lab:
 	docker-compose run --rm go ./bin/envsubst < ./kubernetes/istio-lab/origin-service.yaml | kubectl apply -f -
