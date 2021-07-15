@@ -1,0 +1,6 @@
+query ListTodo($id: ID!) {
+  todos(id: $id) {
+    id
+    text
+  }
+}
