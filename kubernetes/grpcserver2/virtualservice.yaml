@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grpcserver2
+  namespace: grpcserver2
+spec:
+  hosts:
+    - grpcserver2.grpcserver2.svc.cluster.local
+  http:
+
+    - name: "timeout"
+      match:
+        - headers:
+            :path:
+              exact: "/grpcserver.Info/ServerInfo"
+              # exact: "xxx"
+            timeout:
+              exact: enabled
+      route:
+        - destination:
+            host: grpcserver2.grpcserver2.svc.cluster.local
+      fault:
+        delay:
+          percentage:
+            value: 100.0
+          fixedDelay: 30s
+
+    - name: "default"
+      route:
+        - destination:
+            host: grpcserver2.grpcserver2.svc.cluster.local
