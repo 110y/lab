@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/pkg/errors"
@@ -45,9 +46,12 @@ func (s *grpcServer) ServerInfo(ctx context.Context, _ *empty.Empty) (*pb.Server
 
 	ctx = metadata.NewOutgoingContext(ctx, md)
 
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
+
 	res, err := grpcserver2Client.ServerInfo(ctx, &empty.Empty{})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get server info from grpcserver2")
+		return nil, fmt.Errorf("failed to call grpcserver2: %w", err)
 	}
 
 	name := fmt.Sprintf("%s - %s", hostname, res.Name)

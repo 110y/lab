@@ -31,7 +31,7 @@ spec:
         authority-jwt: enabled
     spec:
       containers:
-        - image: ${CONTAINER_REGISTRY}/grpcserver1:404c41a
+        - image: ${CONTAINER_REGISTRY}/grpcserver1:a8867d7
           imagePullPolicy: Always
           name: grpcserver1
           ports:
